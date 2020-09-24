@@ -42,12 +42,12 @@ ext {
     bintrayRepo = 'maven'
 
     // Name which will be visible on bintray
-    bintrayName = 'SampleLibrary'
+    bintrayName = 'bintray_publish_test'
 
     // Library Details
     publishedGroupId = 'com.rene.playground.samplelib'
-    libraryName = 'SampleLibrary'
-    artifact = 'SampleLibrary'
+    libraryName = 'bintray_publish_test'
+    artifact = 'bintray_publish_test'
     libraryDescription = 'Sample Library'
     libraryVersion = version
 
