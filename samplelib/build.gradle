@@ -133,8 +133,8 @@ artifacts {
 
 // https://github.com/bintray/gradle-bintray-plugin
 bintray {
-    user = System.getenv("bintrayUser")
-    key = System.getenv("bintrayApiKey")
+    user = project.hasProperty('bintrayUser') ? project.bintrayUser : System.getenv('BINTRAY_USER')
+    key = project.hasProperty('bintrayKey') ? project.bintrayKey : System.getenv('BINTRAY_API_KEY')
 
     configurations = ['archives']
     pkg {
