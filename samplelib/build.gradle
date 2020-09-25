@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
+version = "0.2.0"
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
@@ -12,7 +14,7 @@ android {
         minSdkVersion 26
         targetSdkVersion 30
         versionCode 1
-        versionName "0.1.0"
+        versionName version
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -49,7 +51,7 @@ ext {
     libraryName = 'bintray_publish_test'
     artifact = 'bintray_publish_test'
     libraryDescription = 'Sample Library'
-    libraryVersion = 'v0.1.0'
+    libraryVersion = version
 
     // Repository Link (For e.g. GitHub repo)
     siteUrl = 'https://github.com/tsairene/BintrayPublishTest'
