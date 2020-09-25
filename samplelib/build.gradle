@@ -49,7 +49,7 @@ ext {
     libraryName = 'bintray_publish_test'
     artifact = 'bintray_publish_test'
     libraryDescription = 'Sample Library'
-    libraryVersion = version
+    libraryVersion = 'v0.1.0'
 
     // Repository Link (For e.g. GitHub repo)
     siteUrl = 'https://github.com/tsairene/BintrayPublishTest'
