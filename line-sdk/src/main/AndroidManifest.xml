@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.linecorp.linesdk">
+    <queries>
+        <package android:name="jp.naver.line.android" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
+
+    <application
+        android:allowBackup="false"
+        android:supportsRtl="true">
+        <activity
+            android:name=".openchat.ui.CreateOpenChatActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <!--
+         "launchMode" of this activity must not be singleInstance and singleTask because, this is
+         launched with using startActivityForResult().
+         This activity must be stacked on same Activity Stack of the caller.
+        -->
+        <activity
+            android:name=".auth.internal.LineAuthenticationActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:theme="@style/LineSdk_AuthenticationActivity" />
+        <activity
+            android:name=".auth.internal.LineAuthenticationCallbackActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="lineauth" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

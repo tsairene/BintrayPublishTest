@@ -1,0 +1,273 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+version = "0.1.0"
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion '30.0.2'
+    publishNonDefault true
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 30
+        versionCode 0_1_00
+        versionName version
+
+        consumerProguardFiles 'consumer-proguard-rules.pro'
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    libraryVariants.all { variant ->
+        variant.outputs.all { output ->
+            def fileName = "line-sdk-${defaultConfig.versionName}"
+            if (buildType.name == 'debug') {
+                fileName += '-debug'
+            }
+            fileName += '.aar'
+            outputFileName = fileName
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    lintOptions {
+        lintConfig file("lint.xml")
+        abortOnError false
+    }
+}
+
+
+configurations {
+    doclava
+    javadocs
+}
+
+dependencies {
+    javadocs "androidx.annotation:annotation:${ver.androidx.annotation}"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${ver.kotlin}"
+
+    implementation "androidx.annotation:annotation:${ver.androidx.annotation}"
+    implementation "androidx.appcompat:appcompat:${ver.androidx.appcompat}"
+    implementation "androidx.browser:browser:${ver.androidx.browser}"
+    implementation "androidx.constraintlayout:constraintlayout:${ver.androidx.constraintlayout}"
+    implementation "androidx.core:core-ktx:${ver.androidx.core}"
+    implementation "androidx.exifinterface:exifinterface:${ver.androidx.exifinterface}"
+    implementation "androidx.legacy:legacy-support-v4:${ver.androidx.legacy}"
+    implementation "androidx.lifecycle:lifecycle-extensions:${ver.androidx.lifecycle}"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${ver.androidx.lifecycle}"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${ver.androidx.lifecycle}"
+
+    // JSON Web Token
+    api "io.jsonwebtoken:jjwt-api:${ver.jjwt}"
+    implementation "io.jsonwebtoken:jjwt-impl:${ver.jjwt}"
+    implementation("io.jsonwebtoken:jjwt-orgjson:${ver.jjwt}") {
+        exclude group: 'org.json', module: 'json' //provided by Android natively
+    }
+
+    implementation "com.google.android.material:material:${ver.google.material}"
+    implementation("com.madgag.spongycastle:prov:${ver.spongycastle}") {
+        exclude group: 'junit', module: 'junit'
+    }
+    implementation "com.squareup.picasso:picasso:${ver.picasso}"
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    // for tests
+    testImplementation "junit:junit:${ver.jUnit}"
+    testImplementation "org.mockito:mockito-core:${ver.mockito}"
+    testImplementation "org.robolectric:robolectric:${ver.robolectric}"
+
+    // for @hide annotation on functions to hide it from javadoc
+    doclava "com.google.doclava:doclava:${ver.doclava}"
+}
+
+ext {
+    javadocParams = [
+            taskGroup    : "javadoc",
+            title        : "LINE SDK for Android",
+            locale       : "en_US",
+            encoding     : "UTF-8",
+            source       : android.sourceSets.main.java.srcDirs,
+            classpath    : project.files(android.getBootClasspath().join(File.pathSeparator)),
+            destDir      : [
+                    public  : new File(project.buildDir, "docs/javadoc_public"),
+                    internal: new File(project.buildDir, "docs/javadoc_internal")
+            ],
+            includes     : [
+                    public  : [
+                            "**/com/linecorp/linesdk/*.java",
+                            "**/com/linecorp/linesdk/api/*.java",
+                            "**/com/linecorp/linesdk/auth/*.java",
+                            "**/com/linecorp/linesdk/widget/*.java"
+                    ],
+                    internal: [
+                            "**/com/linecorp/linesdk/*.java",
+                            "**/com/linecorp/linesdk/api/*.java",
+                            "**/com/linecorp/linesdk/auth/*.java",
+                            "**/com/linecorp/linesdk/widget/*.java",
+                            "**/com/linecorp/linesdk/message/**/*.java"
+                    ]
+            ],
+            externalLinks: [
+                    "https://docs.oracle.com/javase/8/docs/api/",
+                    "https://developer.android.com/reference/"
+            ]
+    ]
+
+    bintrayRepo = 'maven'
+    bintrayName = 'com.rene.sdk'
+
+    // Library Details
+    publishedGroupId = 'com.rene.sdk'
+    libraryName = 'com.rene.sdk'
+    artifact = 'rene-sdk'
+    libraryDescription = 'The LINE SDK for Android provides a modern way of implementing LINE APIs.'
+    libraryVersion = version
+
+    // Git Details
+    siteUrl = 'https://github.com/tsairene/BintrayPublishTest'
+    gitUrl = 'https://github.com/tsairene/BintrayPublishTest.git'
+    githubRepository= 'tsairene/BintrayPublishTest'
+
+    // Developer Details
+    developerId = 'tsairene'
+    developerName = 'Rene Tsai'
+    developerEmail = 'rene.tsai.tw@gmail.com'
+
+    // License Details
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+group = publishedGroupId
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+
+                groupId publishedGroupId
+                artifactId = artifact
+                name libraryName
+                description = libraryDescription
+                url siteUrl
+
+                licenses {
+                    license {
+                        name licenseName
+                        url licenseUrl
+                    }
+                }
+                developers {
+                    developer {
+                        id developerId
+                        name developerName
+                        email developerEmail
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+task javadoc_public(type: Javadoc) {
+    group javadocParams.taskGroup
+    destinationDir = javadocParams.destDir.public
+
+    // doclava doesn't support `title`
+    title = null
+
+    source = javadocParams.source
+    classpath += javadocParams.classpath
+    classpath += configurations.compile
+    classpath += configurations.javadocs
+    include javadocParams.includes.public
+
+    failOnError false
+
+    doFirst {
+        options {
+            doclet 'com.google.doclava.Doclava'
+            docletpath = configurations.doclava.files.asType(List)
+
+            exclude '**/BuildConfig.java'
+            exclude '**/R.java'
+
+            locale javadocParams.locale
+            encoding javadocParams.encoding
+
+            // doclava supports `-title ${title}`
+            addStringOption("title", "${javadocParams.title}")
+            addStringOption("templatedir", "${rootDir}/templates")
+            addMultilineMultiValueOption("federate").with {
+                javadocParams.externalLinks.each {
+                    value.add(["name", it])
+                }
+            }
+            addMultilineMultiValueOption("hdf").with {
+                value.add(["project.version", android.defaultConfig.versionName])
+            }
+        }
+    }
+}
+
+task javadoc_internal(type: Javadoc) {
+    group javadocParams.taskGroup
+    destinationDir = javadocParams.destDir.internal
+
+    source = javadocParams.source
+    classpath += javadocParams.classpath
+    include javadocParams.includes.internal
+
+    failOnError false
+
+    options {
+        docTitle "${javadocParams.title}"
+        windowTitle "${javadocParams.title}"
+
+        locale javadocParams.locale
+        encoding javadocParams.encoding
+
+        links = javadocParams.externalLinks
+    }
+}
+
+// https://github.com/bintray/gradle-bintray-plugin
+bintray {
+    user = project.hasProperty('bintrayUser') ? project.bintrayUser : System.getenv('bintrayUser')
+    key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : System.getenv('bintrayApiKey')
+
+    configurations = ['archives']
+    pkg {
+        repo = bintrayRepo
+        name = bintrayName
+        userOrg = 'line'
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = allLicenses
+        publish = true
+    }
+}

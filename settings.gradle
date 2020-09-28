@@ -1,3 +1,1 @@
-include ':samplelib'
-include ':app'
-rootProject.name = "BintrayPublishTest"
+include ':app', ':line-sdk'
