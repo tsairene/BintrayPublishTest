@@ -5,7 +5,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-version = "1.0.0"
+version = "1.0.3"
 
 android {
     compileSdkVersion 30
@@ -14,7 +14,7 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 1_00_00
+        versionCode 1_00_03
         versionName version
 
         consumerProguardFiles 'consumer-proguard-rules.pro'
