@@ -5,7 +5,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-version = "0.1.0"
+version = "1.0.0"
 
 android {
     compileSdkVersion 30
@@ -15,7 +15,7 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 0_1_00
+        versionCode 1_00_00
         versionName version
 
         consumerProguardFiles 'consumer-proguard-rules.pro'
@@ -262,9 +262,9 @@ bintray {
 
     configurations = ['archives']
     pkg {
+//        userOrg = 'line'
         repo = bintrayRepo
         name = bintrayName
-        userOrg = 'line'
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = allLicenses
