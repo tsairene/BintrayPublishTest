@@ -10,7 +10,6 @@ version = "1.0.0"
 android {
     compileSdkVersion 30
     buildToolsVersion '30.0.2'
-    publishNonDefault true
 
     defaultConfig {
         minSdkVersion 19
@@ -106,7 +105,7 @@ ext {
             classpath    : project.files(android.getBootClasspath().join(File.pathSeparator)),
             destDir      : [
                     public  : new File(project.buildDir, "docs/javadoc_public"),
-                    internal: new File(project.buildDir, "docs/javadoc_internal")
+                    internal: new File(project.buildDir, "docs/javadocs")
             ],
             includes     : [
                     public  : [
@@ -234,7 +233,7 @@ task javadoc_public(type: Javadoc) {
     }
 }
 
-task javadoc_internal(type: Javadoc) {
+task javadoc(type: Javadoc) {
     group javadocParams.taskGroup
     destinationDir = javadocParams.destDir.internal
 
@@ -270,4 +269,19 @@ bintray {
         licenses = allLicenses
         publish = true
     }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
 }
